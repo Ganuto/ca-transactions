@@ -3,6 +3,7 @@ package com.project.transactions.controller;
 import com.project.transactions.controller.data.request.AccountCreationRequest;
 import com.project.transactions.controller.data.response.AccountCreationResponse;
 import com.project.transactions.controller.data.response.AccountResponse;
+import com.project.transactions.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/accounts")
 public class AccountController {
 
+    private final AccountService accountService;
+
     @PostMapping
     public ResponseEntity<AccountCreationResponse> create(@RequestBody @Valid AccountCreationRequest accountCreationRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AccountCreationResponse());
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountService.create(accountCreationRequest));
     }
 
     @GetMapping

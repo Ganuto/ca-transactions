@@ -7,6 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface AccountService {
 
-    ResponseEntity<AccountCreationResponse> create(AccountCreationRequest accountCreationRequest);
-    ResponseEntity<AccountResponse> get(Long accountId);
+    AccountCreationResponse create(AccountCreationRequest accountCreationRequest);
+    AccountResponse get(Long accountId);
 }
