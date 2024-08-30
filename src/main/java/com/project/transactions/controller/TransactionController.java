@@ -2,6 +2,7 @@ package com.project.transactions.controller;
 
 import com.project.transactions.controller.data.request.TransactionRequest;
 import com.project.transactions.controller.data.response.TransactionResponse;
+import com.project.transactions.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/transactions")
 public class TransactionController {
 
+    private final TransactionService transactionService;
+
     @PostMapping
     public ResponseEntity<TransactionResponse> execute(@RequestBody @Valid TransactionRequest transactionRequest) {
-        return ResponseEntity.ok(new TransactionResponse());
+        return ResponseEntity.ok(transactionService.execute(transactionRequest));
     }
 }

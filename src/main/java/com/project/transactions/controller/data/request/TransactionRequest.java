@@ -13,7 +13,7 @@ public class TransactionRequest {
     @NotNull(message = "'documentNumber' cannot be null.")
     private Long accountId;
     @NotNull(message = "'operationTypeId' cannot be null.")
-    private Integer operationTypeId;
+    private int operationTypeId;
     @Positive(message = "'amount' cannot be null.")
     private BigDecimal amount;
 }

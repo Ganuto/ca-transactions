@@ -14,7 +14,13 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "account_id", nullable = false)
     private Long accountId;
-    private Integer operationTypeId;
+
+    @Column(name = "operation_type_id", nullable = false)
+    private int operationTypeId;
+
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 }
