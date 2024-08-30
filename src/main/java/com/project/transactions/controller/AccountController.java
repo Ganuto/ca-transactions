@@ -1,7 +1,6 @@
 package com.project.transactions.controller;
 
 import com.project.transactions.controller.data.request.AccountCreationRequest;
-import com.project.transactions.controller.data.response.AccountCreationResponse;
 import com.project.transactions.controller.data.response.AccountResponse;
 import com.project.transactions.service.AccountService;
 import jakarta.validation.Valid;
@@ -18,12 +17,12 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<AccountCreationResponse> create(@RequestBody @Valid AccountCreationRequest accountCreationRequest){
+    public ResponseEntity<AccountResponse> create(@RequestBody @Valid AccountCreationRequest accountCreationRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(accountService.create(accountCreationRequest));
     }
 
     @GetMapping
     public ResponseEntity<AccountResponse> get(@RequestParam Long accountId){
-        return ResponseEntity.ok(new AccountResponse());
+        return ResponseEntity.ok(accountService.findById(accountId));
     }
 }

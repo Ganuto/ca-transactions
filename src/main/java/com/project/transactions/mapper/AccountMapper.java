@@ -1,7 +1,7 @@
 package com.project.transactions.mapper;
 
 import com.project.transactions.controller.data.request.AccountCreationRequest;
-import com.project.transactions.controller.data.response.AccountCreationResponse;
+import com.project.transactions.controller.data.response.AccountResponse;
 import com.project.transactions.domain.Account;
 
 public abstract class AccountMapper {
@@ -13,8 +13,8 @@ public abstract class AccountMapper {
         return account;
     }
 
-    public static AccountCreationResponse toResponse(Account account){
-        AccountCreationResponse accountCreationResponse = new AccountCreationResponse();
+    public static AccountResponse toResponse(Account account){
+        AccountResponse accountCreationResponse = new AccountResponse();
 
         accountCreationResponse.setAccountId(account.getId());
         accountCreationResponse.setDocumentNumber(account.getDocumentNumber());
