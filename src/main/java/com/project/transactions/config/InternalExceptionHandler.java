@@ -1,8 +1,6 @@
 package com.project.transactions.config;
 
 import com.project.transactions.domain.exception.BusinessException;
-import org.apache.coyote.BadRequestException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,20 +23,9 @@ public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
         super();
     }
 
-    @ExceptionHandler({BusinessException.class, BadRequestException.class})
+    @ExceptionHandler({BusinessException.class, NullPointerException.class})
     public ResponseEntity<Map<String, Object>> handleBusinessException(Exception ex) {
-        return buildErrorResponse(HttpStatus.PRECONDITION_FAILED, ex.getMessage());
-    }
-
-    @ExceptionHandler({DataIntegrityViolationException.class})
-    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolationException(Exception ex) {
         return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
-    }
-
-    // TODO: Adjust the handler below and add more handlers
-    @ExceptionHandler({NullPointerException.class})
-    public ResponseEntity<Map<String, Object>> handleNullPointerException(Exception ex) {
-        return buildErrorResponse(HttpStatus.PRECONDITION_FAILED, ex.getMessage());
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(HttpStatus httpStatus, String message) {
