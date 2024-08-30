@@ -3,8 +3,10 @@ package com.project.transactions.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,4 +25,9 @@ public class Transaction {
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "event_date")
+    private LocalDateTime eventDate;
 }
