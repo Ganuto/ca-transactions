@@ -3,11 +3,12 @@ package com.project.transactions.service.impl;
 import com.project.transactions.controller.data.request.AccountCreationRequest;
 import com.project.transactions.controller.data.response.AccountResponse;
 import com.project.transactions.domain.Account;
-import com.project.transactions.domain.BusinessException;
+import com.project.transactions.domain.exception.BusinessException;
 import com.project.transactions.mapper.AccountMapper;
 import com.project.transactions.repository.AccountRepository;
 import com.project.transactions.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,8 +21,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse create(AccountCreationRequest accountCreationRequest) {
-        Account account = accountRepository.save(AccountMapper.toDomain(accountCreationRequest));
-        return AccountMapper.toResponse(account);
+        try{
+            Account account = accountRepository.save(AccountMapper.toDomain(accountCreationRequest));
+            return AccountMapper.toResponse(account);
+        } catch (DataAccessException ex){
+            throw new BusinessException(String.format("DocumentNumber [%s] already exists.", accountCreationRequest.getDocumentNumber()) );
+        }
     }
 
     @Override

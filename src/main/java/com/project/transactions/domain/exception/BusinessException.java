@@ -1,4 +1,4 @@
-package com.project.transactions.domain;
+package com.project.transactions.domain.exception;
 
 public class BusinessException extends RuntimeException {
 

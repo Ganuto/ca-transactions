@@ -1,6 +1,6 @@
 package com.project.transactions.config;
 
-import com.project.transactions.domain.BusinessException;
+import com.project.transactions.domain.exception.BusinessException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
