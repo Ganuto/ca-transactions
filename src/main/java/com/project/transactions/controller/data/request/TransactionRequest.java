@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class TransactionRequest {
-    @NotNull(message = "'documentNumber' cannot be null")
+    @NotNull(message = "'documentNumber' cannot be null.")
     private Long accountId;
-    @NotNull(message = "'operationTypeId' cannot be null")
+    @NotNull(message = "'operationTypeId' cannot be null.")
     private Integer operationTypeId;
-    @Positive(message = "'amount' cannot be null")
+    @Positive(message = "'amount' cannot be null.")
     private BigDecimal amount;
 }
