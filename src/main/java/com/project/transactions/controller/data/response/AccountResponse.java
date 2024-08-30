@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccountResponse {
-    private Long documentNumber;
+    private String documentNumber;
     private Long accountId;
 }

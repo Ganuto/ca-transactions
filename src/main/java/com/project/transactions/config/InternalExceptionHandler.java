@@ -1,6 +1,7 @@
 package com.project.transactions.config;
 
 import com.project.transactions.domain.BusinessException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
         super();
     }
 
-    @ExceptionHandler({BusinessException.class})
+    @ExceptionHandler({BusinessException.class, BadRequestException.class})
     public ResponseEntity<Map<String, Object>> handleBusinessException(Exception ex) {
         return buildErrorResponse(HttpStatus.PRECONDITION_FAILED, ex.getMessage());
     }

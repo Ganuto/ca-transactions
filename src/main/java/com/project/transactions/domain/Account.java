@@ -13,5 +13,5 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "document_number", unique = true, nullable = false)
-    private Long documentNumber;
+    private String documentNumber;
 }
