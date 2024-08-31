@@ -7,17 +7,17 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OperationType {
+    UNKNOWN(0),
     PURCHASE(1),
     INSTALLMENT_PURCHASE(2),
     WITHDRAWAL(3),
-    PAYMENT(4),
-    UNKNOWN(0);
+    PAYMENT(4);
 
     private final Integer id;
 
     public static OperationType getById(int id) {
-        for(OperationType operationType : values()) {
-            if(operationType.id.equals(id)){
+        for (OperationType operationType : values()) {
+            if (operationType.id.equals(id)) {
                 return operationType;
             }
         }
