@@ -1,7 +1,6 @@
 package com.project.transactions.controller.data.request;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +13,6 @@ public class TransactionRequest {
     private Long accountId;
     @NotNull(message = "'operationTypeId' cannot be null.")
     private int operationTypeId;
-    @Positive(message = "'amount' cannot be null.")
+    // Adjust to be numbers only
     private BigDecimal amount;
 }
