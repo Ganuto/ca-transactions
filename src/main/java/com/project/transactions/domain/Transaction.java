@@ -20,8 +20,9 @@ public class Transaction {
     @Column(name = "account_id", nullable = false)
     private Long accountId;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "operation_type_id", nullable = false)
-    private int operationTypeId;
+    private OperationType operationType;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
