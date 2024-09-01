@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.webjars.NotFoundException;
 
 import java.util.Optional;
 
@@ -76,8 +77,8 @@ public class AccountServiceTest {
 
         when(accountRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        BusinessException businessException = assertThrows(BusinessException.class, () -> accountService.findById(accountId));
+        NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> accountService.findById(accountId));
 
-        assertEquals(String.format("Account with id: [%s] not found.", accountId), businessException.getMessage());
+        assertEquals(String.format("Account with id: [%s] not found.", accountId), notFoundException.getMessage());
     }
 }

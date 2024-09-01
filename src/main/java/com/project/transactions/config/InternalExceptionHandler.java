@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -23,9 +24,14 @@ public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
         super();
     }
 
-    @ExceptionHandler({BusinessException.class, NullPointerException.class})
+    @ExceptionHandler({BusinessException.class})
     public ResponseEntity<Map<String, Object>> handleBusinessException(Exception ex) {
         return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+    }
+
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<Map<String, Object>> handleNotFoundException(Exception ex) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(HttpStatus httpStatus, String message) {

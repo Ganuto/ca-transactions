@@ -20,7 +20,7 @@ public class Transaction {
     @Column(name = "account_id", nullable = false)
     private Long accountId;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated
     @Column(name = "operation_type_id", nullable = false)
     private OperationType operationType;
 

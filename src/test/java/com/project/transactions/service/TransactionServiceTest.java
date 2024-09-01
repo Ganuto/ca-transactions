@@ -60,7 +60,7 @@ public class TransactionServiceTest {
 
         BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
 
-        assertEquals(String.format("The operation [%s] cannot have positive amount [%s].", OperationType.PURCHASE, amount), businessException.getMessage());
+        assertEquals(String.format("The operation [%s] with id [%s] cannot have positive amount [%s].", OperationType.PURCHASE, OperationType.PURCHASE.getId(), amount), businessException.getMessage());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class TransactionServiceTest {
 
         BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
 
-        assertEquals(String.format("The operation [%s] cannot have positive amount [%s].", OperationType.INSTALLMENT_PURCHASE, amount), businessException.getMessage());
+        assertEquals(String.format("The operation [%s] with id [%s] cannot have positive amount [%s].", OperationType.INSTALLMENT_PURCHASE, OperationType.INSTALLMENT_PURCHASE.getId(), amount), businessException.getMessage());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TransactionServiceTest {
 
         BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
 
-        assertEquals(String.format("The operation [%s] cannot have positive amount [%s].", OperationType.WITHDRAWAL, amount), businessException.getMessage());
+        assertEquals(String.format("The operation [%s] with id [%s] cannot have positive amount [%s].", OperationType.WITHDRAWAL, OperationType.WITHDRAWAL.getId(), amount), businessException.getMessage());
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TransactionServiceTest {
 
         BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
 
-        assertEquals(String.format("The operation [%s] cannot have negative amount [%s].", OperationType.PAYMENT, amount), businessException.getMessage());
+        assertEquals(String.format("The operation [%s] with id [%s] cannot have negative amount [%s].", OperationType.PAYMENT, OperationType.PAYMENT.getId(), amount), businessException.getMessage());
     }
 
     @Test

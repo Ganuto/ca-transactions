@@ -39,12 +39,12 @@ public class TransactionServiceImpl implements TransactionService {
         switch (operationType) {
             case PAYMENT -> {
                 if (!isPositiveAmount) {
-                    throw new BusinessException(String.format("The operation [%s] cannot have negative amount [%s].", operationType, amount));
+                    throw new BusinessException(String.format("The operation [%s] with id [%s] cannot have negative amount [%s].", operationType, operationType.getId(), amount));
                 }
             }
             case INSTALLMENT_PURCHASE, PURCHASE, WITHDRAWAL -> {
                 if (isPositiveAmount) {
-                    throw new BusinessException(String.format("The operation [%s] cannot have positive amount [%s].", operationType, amount));
+                    throw new BusinessException(String.format("The operation [%s] with id [%s] cannot have positive amount [%s].", operationType, operationType.getId(), amount));
                 }
             }
         }

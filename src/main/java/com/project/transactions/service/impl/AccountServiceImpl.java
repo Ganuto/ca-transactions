@@ -10,6 +10,7 @@ import com.project.transactions.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountResponse findById(Long accountId) {
         Account account = Optional.of(accountRepository.findById(accountId))
-                .get().orElseThrow(() -> new BusinessException(String.format("Account with id: [%s] not found.", accountId)));
+                .get().orElseThrow(() -> new NotFoundException(String.format("Account with id: [%s] not found.", accountId)));
         return AccountMapper.toResponse(account);
     }
 }
