@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class TransactionMock {
     private static final Long MOCK_TRANSACTION_ID = 1L;
     private static final Long MOCK_ACCOUNT_ID = 1L;
-    private static final BigDecimal MOCK_AMOUNT = BigDecimal.TEN;
 
     public static TransactionRequest createTransactionRequest(OperationType operationType, BigDecimal amount) {
         TransactionRequest transactionRequest = new TransactionRequest();
@@ -34,13 +33,13 @@ public class TransactionMock {
         return transactionResponse;
     }
 
-    public static Transaction createTransaction() {
+    public static Transaction createTransaction(OperationType operationType, BigDecimal amount) {
         Transaction transaction = new Transaction();
 
         transaction.setId(MOCK_TRANSACTION_ID);
         transaction.setAccountId(MOCK_ACCOUNT_ID);
-        transaction.setOperationType(OperationType.PURCHASE);
-        transaction.setAmount(MOCK_AMOUNT);
+        transaction.setOperationType(operationType);
+        transaction.setAmount(amount);
         transaction.setEventDate(LocalDateTime.of(2024, 8, 19, 0, 0));
 
         return transaction;

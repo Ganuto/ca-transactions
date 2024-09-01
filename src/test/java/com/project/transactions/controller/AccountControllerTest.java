@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,5 +58,29 @@ public class AccountControllerTest {
                         .content(TestUtils.convertObjectToJsonString(accountCreationRequest)))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
+    }
+
+    @Test
+    public void getUserSuccessfully() throws Exception {
+        AccountResponse accountResponse = AccountMock.createAccountResponse();
+
+        when(accountService.findById(any(Long.class))).thenReturn(accountResponse);
+
+        mockMvc.perform(get("/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("accountId", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.account_id").value(accountResponse.getAccountId()))
+                .andExpect(jsonPath("$.document_number").value(accountResponse.getDocumentNumber()));
+    }
+
+    @Test
+    public void getUserAndReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("accountId", "NOT_A_NUMBER"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

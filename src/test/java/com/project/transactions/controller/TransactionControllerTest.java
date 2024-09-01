@@ -106,5 +106,4 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.operation_type_id").value(transactionResponse.getOperationTypeId()))
                 .andExpect(jsonPath("$.amount").value(transactionResponse.getAmount()));
     }
-    
 }
