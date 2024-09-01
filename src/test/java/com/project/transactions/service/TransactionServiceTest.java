@@ -36,6 +36,90 @@ public class TransactionServiceTest {
     private TransactionServiceImpl transactionService;
 
     @Test
+    public void createPurchaseTransactionSuccessfully() {
+        BigDecimal amount = BigDecimal.valueOf(-10.23);
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.PURCHASE, amount);
+        Transaction transaction = TransactionMock.createTransaction(OperationType.PURCHASE, amount);
+
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        TransactionResponse transactionResponse = transactionService.execute(transactionRequest);
+
+        verify(accountService).findById(anyLong());
+        assertEquals(transaction.getId(), transactionResponse.getTransactionId());
+        assertEquals(transaction.getAccountId(), transactionResponse.getAccountId());
+        assertEquals(transaction.getOperationType().getId(), transactionResponse.getOperationTypeId());
+        assertEquals(transaction.getAmount(), transactionResponse.getAmount());
+    }
+
+    @Test
+    public void createPurchaseTransactionUnsuccessfully() {
+        BigDecimal amount = BigDecimal.valueOf(20.23);
+
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.PURCHASE, amount);
+
+        BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
+
+        assertEquals(String.format("The operation [%s] cannot have positive amount [%s].", OperationType.PURCHASE, amount), businessException.getMessage());
+    }
+
+    @Test
+    public void createInstallmentPurchaseTransactionSuccessfully() {
+        BigDecimal amount = BigDecimal.valueOf(-11.23);
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.INSTALLMENT_PURCHASE, amount);
+        Transaction transaction = TransactionMock.createTransaction(OperationType.INSTALLMENT_PURCHASE, amount);
+
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        TransactionResponse transactionResponse = transactionService.execute(transactionRequest);
+
+        verify(accountService).findById(anyLong());
+        assertEquals(transaction.getId(), transactionResponse.getTransactionId());
+        assertEquals(transaction.getAccountId(), transactionResponse.getAccountId());
+        assertEquals(transaction.getOperationType().getId(), transactionResponse.getOperationTypeId());
+        assertEquals(transaction.getAmount(), transactionResponse.getAmount());
+    }
+
+    @Test
+    public void createInstallmentPurchaseTransactionUnsuccessfully() {
+        BigDecimal amount = BigDecimal.valueOf(10.23);
+
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.INSTALLMENT_PURCHASE, amount);
+
+        BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
+
+        assertEquals(String.format("The operation [%s] cannot have positive amount [%s].", OperationType.INSTALLMENT_PURCHASE, amount), businessException.getMessage());
+    }
+
+    @Test
+    public void createWithdrawTransactionSuccessfully() {
+        BigDecimal amount = BigDecimal.valueOf(-11.23);
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.WITHDRAWAL, amount);
+        Transaction transaction = TransactionMock.createTransaction(OperationType.WITHDRAWAL, amount);
+
+        when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);
+
+        TransactionResponse transactionResponse = transactionService.execute(transactionRequest);
+
+        verify(accountService).findById(anyLong());
+        assertEquals(transaction.getId(), transactionResponse.getTransactionId());
+        assertEquals(transaction.getAccountId(), transactionResponse.getAccountId());
+        assertEquals(transaction.getOperationType().getId(), transactionResponse.getOperationTypeId());
+        assertEquals(transaction.getAmount(), transactionResponse.getAmount());
+    }
+
+    @Test
+    public void createWithdrawTransactionUnsuccessfully() {
+        BigDecimal amount = BigDecimal.valueOf(10.23);
+
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.WITHDRAWAL, amount);
+
+        BusinessException businessException = assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
+
+        assertEquals(String.format("The operation [%s] cannot have positive amount [%s].", OperationType.WITHDRAWAL, amount), businessException.getMessage());
+    }
+
+    @Test
     public void createPaymentTransactionSuccessfully() {
         TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(10.23));
         Transaction transaction = TransactionMock.createTransaction(OperationType.PAYMENT, BigDecimal.valueOf(10.23));
@@ -62,5 +146,15 @@ public class TransactionServiceTest {
         assertEquals(String.format("The operation [%s] cannot have negative amount [%s].", OperationType.PAYMENT, amount), businessException.getMessage());
     }
 
+    @Test
+    public void createTransactionWithNonexistentAccountId() {
+        BigDecimal amount = BigDecimal.valueOf(10.23);
 
+        TransactionRequest transactionRequest = TransactionMock.createTransactionRequest(OperationType.PAYMENT, amount);
+
+        when(accountService.findById(anyLong())).thenThrow(BusinessException.class);
+        assertThrows(BusinessException.class, () -> transactionService.execute(transactionRequest));
+
+        verify(accountService).findById(anyLong());
+    }
 }
