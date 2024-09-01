@@ -49,6 +49,7 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.document_number").value(accountResponse.getDocumentNumber()));
     }
 
+    // TODO: CHECK ERROR MESSAGE
     @Test
     public void createUserAndReturnBadRequest() throws Exception {
         AccountCreationRequest accountCreationRequest = AccountMock.createWrongAccountCreationRequest();
@@ -75,6 +76,7 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.document_number").value(accountResponse.getDocumentNumber()));
     }
 
+    // TODO: CHECK ERROR MESSAGE
     @Test
     public void getUserAndReturnBadRequest() throws Exception {
         mockMvc.perform(get("/accounts")
