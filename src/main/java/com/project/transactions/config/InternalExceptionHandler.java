@@ -19,10 +19,6 @@ public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
   private static final String HTTP_STATUS = "httpStatus";
   private static final String ERROR_MESSAGE = "errorMessage";
 
-  public InternalExceptionHandler() {
-    super();
-  }
-
   @ExceptionHandler({BusinessException.class})
   public ResponseEntity<Map<String, Object>> handleBusinessException(Exception ex) {
     return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
