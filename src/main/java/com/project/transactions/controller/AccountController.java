@@ -14,15 +14,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/accounts")
 public class AccountController {
 
-    private final AccountService accountService;
+  private final AccountService accountService;
 
-    @PostMapping
-    public ResponseEntity<AccountResponse> create(@RequestBody @Valid AccountCreationRequest accountCreationRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(accountService.create(accountCreationRequest));
-    }
+  @PostMapping
+  public ResponseEntity<AccountResponse> create(
+      @RequestBody @Valid AccountCreationRequest accountCreationRequest) {
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(accountService.create(accountCreationRequest));
+  }
 
-    @GetMapping
-    public ResponseEntity<AccountResponse> get(@RequestParam Long accountId){
-        return ResponseEntity.ok(accountService.findById(accountId));
-    }
+  @GetMapping
+  public ResponseEntity<AccountResponse> get(@RequestParam Long accountId) {
+    return ResponseEntity.ok(accountService.findById(accountId));
+  }
 }

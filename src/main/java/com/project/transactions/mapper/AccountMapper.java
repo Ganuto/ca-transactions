@@ -5,20 +5,20 @@ import com.project.transactions.controller.data.response.AccountResponse;
 import com.project.transactions.domain.Account;
 
 public abstract class AccountMapper {
-    public static Account toDomain(AccountCreationRequest accountCreationRequest){
-        Account account = new Account();
+  public static Account toDomain(AccountCreationRequest accountCreationRequest) {
+    Account account = new Account();
 
-        account.setDocumentNumber(accountCreationRequest.getDocumentNumber());
+    account.setDocumentNumber(accountCreationRequest.getDocumentNumber());
 
-        return account;
-    }
+    return account;
+  }
 
-    public static AccountResponse toResponse(Account account){
-        AccountResponse accountCreationResponse = new AccountResponse();
+  public static AccountResponse toResponse(Account account) {
+    AccountResponse accountCreationResponse = new AccountResponse();
 
-        accountCreationResponse.setAccountId(account.getId());
-        accountCreationResponse.setDocumentNumber(account.getDocumentNumber());
+    accountCreationResponse.setAccountId(account.getId());
+    accountCreationResponse.setDocumentNumber(account.getDocumentNumber());
 
-        return accountCreationResponse;
-    }
+    return accountCreationResponse;
+  }
 }

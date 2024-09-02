@@ -16,12 +16,11 @@ import org.springframework.test.context.ContextConfiguration;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TransactionsApplicationIT {
 
-    @LocalServerPort
-    Integer port;
+  @LocalServerPort Integer port;
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = port;
-    }
+  @Before
+  public void setUp() {
+    RestAssured.baseURI = "http://localhost";
+    RestAssured.port = port;
+  }
 }

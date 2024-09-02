@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/transactions")
 public class TransactionController {
 
-    private final TransactionService transactionService;
+  private final TransactionService transactionService;
 
-    @PostMapping
-    public ResponseEntity<TransactionResponse> execute(@RequestBody @Valid TransactionRequest transactionRequest) {
-        return ResponseEntity.ok(transactionService.execute(transactionRequest));
-    }
+  @PostMapping
+  public ResponseEntity<TransactionResponse> execute(
+      @RequestBody @Valid TransactionRequest transactionRequest) {
+    return ResponseEntity.ok(transactionService.execute(transactionRequest));
+  }
 }

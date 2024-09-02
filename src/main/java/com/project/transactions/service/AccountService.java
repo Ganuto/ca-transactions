@@ -5,6 +5,7 @@ import com.project.transactions.controller.data.response.AccountResponse;
 
 public interface AccountService {
 
-    AccountResponse create(AccountCreationRequest accountCreationRequest);
-    AccountResponse findById(Long accountId);
+  AccountResponse create(AccountCreationRequest accountCreationRequest);
+
+  AccountResponse findById(Long accountId);
 }
