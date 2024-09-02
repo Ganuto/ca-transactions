@@ -4,6 +4,7 @@ import com.project.transactions.controller.data.request.AccountCreationRequest;
 import com.project.transactions.controller.data.response.AccountResponse;
 import com.project.transactions.service.AccountService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class AccountController {
   }
 
   @GetMapping
-  public ResponseEntity<AccountResponse> get(@RequestParam Long accountId) {
+  public ResponseEntity<AccountResponse> get(
+      @RequestParam @Positive(message = "'accountId' cannot be negative or zero") Long accountId) {
     return ResponseEntity.ok(accountService.findById(accountId));
   }
 }

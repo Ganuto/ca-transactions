@@ -10,11 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TransactionRequest {
-  @NotNull(message = "'documentNumber' cannot be null.")
+  @NotNull(message = "'document_number' cannot be null.")
   private Long accountId;
 
-  @Min(value = 1, message = "'operationTypeId' cannot be less than 1")
-  @Max(value = 4, message = "'operationTypeId' cannot be more than 4")
+  @Min(value = 1, message = "'operation_type_id' cannot be less than 1")
+  @Max(value = 4, message = "'operation_type_id' cannot be more than 4")
   private int operationTypeId;
 
   @NotNull(message = "'amount' cannot be null.")

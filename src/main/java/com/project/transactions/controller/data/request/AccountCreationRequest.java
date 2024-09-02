@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccountCreationRequest {
-  @Pattern(regexp = "^[0-9]*$")
-  @NotBlank(message = "'documentNumber' cannot be null.")
+  @Pattern(regexp = "^[0-9]*$", message = "'document_number' must match the expression '^[0-9]*$' number only.")
+  @NotBlank(message = "'document_number' cannot be null.")
   private String documentNumber;
 }
