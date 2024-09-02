@@ -22,7 +22,7 @@ public class AccountIT extends TransactionsApplicationIT {
 
   @Test
   @Order(1)
-  public void createAccountSuccessfully() throws IOException {
+  public void createSuccessfully() throws IOException {
     AccountCreationRequest accountCreationRequest = AccountMock.createAccountCreationRequest();
 
     IntegrationRequests.post("/accounts", accountCreationRequest)
@@ -36,7 +36,7 @@ public class AccountIT extends TransactionsApplicationIT {
 
   @Test
   @Order(2)
-  public void getAccountSuccessfully() {
+  public void getSuccessfully() {
     Long accountId = 1L;
 
     IntegrationRequests.get(String.format("/accounts?accountId=%s", accountId))
@@ -48,7 +48,7 @@ public class AccountIT extends TransactionsApplicationIT {
   }
 
   @Test
-  public void createAccountUnsuccessfully() throws IOException {
+  public void createUnsuccessfully() throws IOException {
     AccountCreationRequest accountCreationRequest = new AccountCreationRequest();
     accountCreationRequest.setDocumentNumber("ABC");
 
@@ -64,7 +64,7 @@ public class AccountIT extends TransactionsApplicationIT {
   }
 
   @Test
-  public void getAccountUnsuccessfully() {
+  public void getUnsuccessfully() {
     Long accountId = -1L;
 
     IntegrationRequests.get(String.format("/accounts?accountId=%s", accountId))
