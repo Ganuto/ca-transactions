@@ -14,7 +14,6 @@ This project is a Spring Boot application packaged as a Docker container. It dem
 
 ### 1. Clone the Repository
 
-* bash
 ```
 git clone https://github.com/Ganuto/transactions.git
 cd your-springboot-app
@@ -24,8 +23,6 @@ cd your-springboot-app
 
 If you wish to build the application locally before Dockerizing, use:
 
-
-* bash
 ````
 ./mvnw clean package
 ````
