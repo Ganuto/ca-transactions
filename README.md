@@ -15,13 +15,13 @@ Spring Boot application using Docker.
 
 ### Running Locally
 
-Clone the project
+Clone the project:
 
 ```bash
   git clone https://github.com/Ganuto/transactions.git
 ```
 
-Go to the project directory
+Go to the project directory:
 
 ```bash
   cd transactions
@@ -33,7 +33,7 @@ Build the application and generate the .jar:
 ./mvnw clean package
 ````
 
-Then, execute the recently generated .jar
+Then, execute the recently generated .jar:
 
 ````
 java -jar target/transactions-1.0.0.jar
