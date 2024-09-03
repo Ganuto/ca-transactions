@@ -2,7 +2,9 @@ package com.project.transactions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.transactions.controller.data.request.TransactionRequest;
+import com.project.transactions.controller.data.response.TransactionResponse;
 import com.project.transactions.domain.Account;
 import com.project.transactions.domain.OperationType;
 import com.project.transactions.domain.Transaction;
@@ -24,8 +26,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class TransactionIT extends TransactionsApplicationIT {
 
   @Autowired private AccountRepository accountRepository;
-
   @Autowired private TransactionRepository transactionRepository;
+  @Autowired private ObjectMapper objectMapper;
 
   @Before
   public void init() {
@@ -39,18 +41,109 @@ public class TransactionIT extends TransactionsApplicationIT {
         TransactionMock.createTransactionRequest(
             OperationType.PURCHASE, BigDecimal.valueOf(-10.99));
 
-    IntegrationRequests.post("/transactions", transactionRequest)
-        .then()
-        .assertThat()
-        .statusCode(HttpStatus.OK.value());
+    String response =
+        IntegrationRequests.post("/transactions", transactionRequest)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .response()
+            .asString();
 
-    Optional<Transaction> transactionOptional = transactionRepository.findById(1L);
+    TransactionResponse transactionResponse =
+        objectMapper.readValue(response, TransactionResponse.class);
+
+    Optional<Transaction> transactionOptional =
+        transactionRepository.findById(transactionResponse.getTransactionId());
 
     assertTrue(transactionOptional.isPresent());
     Transaction transaction = transactionOptional.get();
-    assertNotNull(transaction.getId());
-    assertEquals(transactionRequest.getAccountId(), transaction.getAccountId());
-    assertEquals(transactionRequest.getOperationTypeId(), transaction.getOperationType().getId());
-    assertEquals(transactionRequest.getAmount(), transaction.getAmount());
+    assertEquals(transactionResponse.getTransactionId(), transaction.getId());
+    assertEquals(transactionResponse.getAccountId(), transaction.getAccountId());
+    assertEquals(transactionResponse.getOperationTypeId(), transaction.getOperationType().getId());
+    assertEquals(transactionResponse.getAmount(), transaction.getAmount());
+  }
+
+  @Test
+  public void executeInstallmentPurchaseSuccessfully() throws IOException {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(
+            OperationType.INSTALLMENT_PURCHASE, BigDecimal.valueOf(-10.23));
+
+    String response = IntegrationRequests.post("/transactions", transactionRequest)
+        .then()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .response()
+        .asString();
+
+    TransactionResponse transactionResponse =
+        objectMapper.readValue(response, TransactionResponse.class);
+
+    Optional<Transaction> transactionOptional =
+        transactionRepository.findById(transactionResponse.getTransactionId());
+
+    assertTrue(transactionOptional.isPresent());
+    Transaction transaction = transactionOptional.get();
+    assertEquals(transactionResponse.getTransactionId(), transaction.getId());
+    assertEquals(transactionResponse.getAccountId(), transaction.getAccountId());
+    assertEquals(transactionResponse.getOperationTypeId(), transaction.getOperationType().getId());
+    assertEquals(transactionResponse.getAmount(), transaction.getAmount());
+  }
+
+  @Test
+  public void executeWithdrawSuccessfully() throws IOException {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(
+            OperationType.INSTALLMENT_PURCHASE, BigDecimal.valueOf(-4.99));
+
+    String response = IntegrationRequests.post("/transactions", transactionRequest)
+        .then()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+            .extract()
+            .response()
+            .asString();
+
+    TransactionResponse transactionResponse =
+            objectMapper.readValue(response, TransactionResponse.class);
+
+    Optional<Transaction> transactionOptional =
+            transactionRepository.findById(transactionResponse.getTransactionId());
+
+    assertTrue(transactionOptional.isPresent());
+    Transaction transaction = transactionOptional.get();
+    assertEquals(transactionResponse.getTransactionId(), transaction.getId());
+    assertEquals(transactionResponse.getAccountId(), transaction.getAccountId());
+    assertEquals(transactionResponse.getOperationTypeId(), transaction.getOperationType().getId());
+    assertEquals(transactionResponse.getAmount(), transaction.getAmount());
+  }
+
+  @Test
+  public void executePaymentSuccessfully() throws IOException {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(32.22));
+
+    String response = IntegrationRequests.post("/transactions", transactionRequest)
+        .then()
+        .assertThat()
+        .statusCode(HttpStatus.OK.value())
+            .extract()
+            .response()
+            .asString();
+
+    TransactionResponse transactionResponse =
+            objectMapper.readValue(response, TransactionResponse.class);
+
+    Optional<Transaction> transactionOptional =
+            transactionRepository.findById(transactionResponse.getTransactionId());
+
+    assertTrue(transactionOptional.isPresent());
+    Transaction transaction = transactionOptional.get();
+    assertEquals(transactionResponse.getTransactionId(), transaction.getId());
+    assertEquals(transactionResponse.getAccountId(), transaction.getAccountId());
+    assertEquals(transactionResponse.getOperationTypeId(), transaction.getOperationType().getId());
+    assertEquals(transactionResponse.getAmount(), transaction.getAmount());
   }
 }

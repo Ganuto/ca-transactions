@@ -42,9 +42,10 @@ public class AccountIT extends TransactionsApplicationIT {
 
     AccountResponse accountResponse = objectMapper.readValue(response, AccountResponse.class);
 
-    Account account =
-        accountRepository.findByDocumentNumber(accountCreationRequest.getDocumentNumber()).get();
-
+    Optional<Account> accountOptional =
+        accountRepository.findByDocumentNumber(accountCreationRequest.getDocumentNumber());
+    assertTrue(accountOptional.isPresent());
+    Account account = accountOptional.get();
     assertEquals(accountResponse.getAccountId(), account.getId());
     assertEquals(accountResponse.getDocumentNumber(), account.getDocumentNumber());
   }
@@ -64,8 +65,10 @@ public class AccountIT extends TransactionsApplicationIT {
 
     AccountResponse accountResponse = objectMapper.readValue(response, AccountResponse.class);
 
-    Account account = accountRepository.findById(accountId).get();
+    Optional<Account> accountOptional = accountRepository.findById(accountResponse.getAccountId());
 
+    assertTrue(accountOptional.isPresent());
+    Account account = accountOptional.get();
     assertEquals(accountResponse.getAccountId(), account.getId());
     assertEquals(accountResponse.getDocumentNumber(), account.getDocumentNumber());
   }
