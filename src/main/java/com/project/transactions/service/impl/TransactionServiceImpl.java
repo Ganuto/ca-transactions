@@ -12,6 +12,7 @@ import com.project.transactions.service.TransactionService;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +30,12 @@ public class TransactionServiceImpl implements TransactionService {
     return TransactionMapper.toResponse(persistedTransaction);
   }
 
-  private void validateAccountExistence(Long accountID) {
-    accountService.findById(accountID);
+  private void validateAccountExistence(Long accountId) {
+    try{
+      accountService.findById(accountId);
+    } catch (NotFoundException ex){
+      throw new BusinessException(String.format("Account with id: [%s] not found.", accountId));
+    }
   }
 
   private void validateOperationAndAmount(OperationType operationType, BigDecimal amount) {

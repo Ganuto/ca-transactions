@@ -15,9 +15,9 @@ import org.webjars.NotFoundException;
 public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private static final String TIMESTAMP = "timestamp";
-  private static final String HTTP_CODE = "httpCode";
-  private static final String HTTP_STATUS = "httpStatus";
-  private static final String ERROR_MESSAGE = "errorMessage";
+  private static final String HTTP_CODE = "http_code";
+  private static final String HTTP_STATUS = "http_status";
+  private static final String ERROR_MESSAGE = "error_message";
 
   @ExceptionHandler({BusinessException.class})
   public ResponseEntity<Map<String, Object>> handleBusinessException(Exception ex) {

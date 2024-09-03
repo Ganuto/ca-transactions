@@ -1,5 +1,6 @@
 package com.project.transactions;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,13 +71,14 @@ public class TransactionIT extends TransactionsApplicationIT {
         TransactionMock.createTransactionRequest(
             OperationType.INSTALLMENT_PURCHASE, BigDecimal.valueOf(-10.23));
 
-    String response = IntegrationRequests.post("/transactions", transactionRequest)
-        .then()
-        .assertThat()
-        .statusCode(HttpStatus.OK.value())
-        .extract()
-        .response()
-        .asString();
+    String response =
+        IntegrationRequests.post("/transactions", transactionRequest)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .response()
+            .asString();
 
     TransactionResponse transactionResponse =
         objectMapper.readValue(response, TransactionResponse.class);
@@ -98,19 +100,20 @@ public class TransactionIT extends TransactionsApplicationIT {
         TransactionMock.createTransactionRequest(
             OperationType.INSTALLMENT_PURCHASE, BigDecimal.valueOf(-4.99));
 
-    String response = IntegrationRequests.post("/transactions", transactionRequest)
-        .then()
-        .assertThat()
-        .statusCode(HttpStatus.OK.value())
+    String response =
+        IntegrationRequests.post("/transactions", transactionRequest)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .response()
             .asString();
 
     TransactionResponse transactionResponse =
-            objectMapper.readValue(response, TransactionResponse.class);
+        objectMapper.readValue(response, TransactionResponse.class);
 
     Optional<Transaction> transactionOptional =
-            transactionRepository.findById(transactionResponse.getTransactionId());
+        transactionRepository.findById(transactionResponse.getTransactionId());
 
     assertTrue(transactionOptional.isPresent());
     Transaction transaction = transactionOptional.get();
@@ -125,19 +128,20 @@ public class TransactionIT extends TransactionsApplicationIT {
     TransactionRequest transactionRequest =
         TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(32.22));
 
-    String response = IntegrationRequests.post("/transactions", transactionRequest)
-        .then()
-        .assertThat()
-        .statusCode(HttpStatus.OK.value())
+    String response =
+        IntegrationRequests.post("/transactions", transactionRequest)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.OK.value())
             .extract()
             .response()
             .asString();
 
     TransactionResponse transactionResponse =
-            objectMapper.readValue(response, TransactionResponse.class);
+        objectMapper.readValue(response, TransactionResponse.class);
 
     Optional<Transaction> transactionOptional =
-            transactionRepository.findById(transactionResponse.getTransactionId());
+        transactionRepository.findById(transactionResponse.getTransactionId());
 
     assertTrue(transactionOptional.isPresent());
     Transaction transaction = transactionOptional.get();
@@ -145,5 +149,33 @@ public class TransactionIT extends TransactionsApplicationIT {
     assertEquals(transactionResponse.getAccountId(), transaction.getAccountId());
     assertEquals(transactionResponse.getOperationTypeId(), transaction.getOperationType().getId());
     assertEquals(transactionResponse.getAmount(), transaction.getAmount());
+  }
+
+  @Test
+  public void executePaymentWithNegativeAmountThenReturnBusinessException() throws IOException {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(-32.22));
+
+    IntegrationRequests.post("/transactions", transactionRequest)
+        .then()
+        .assertThat()
+        .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+  }
+
+  @Test
+  public void executePaymentWithNonExistentAccountIdThenReturnBusinessException()
+      throws IOException {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(100.22));
+    Long nonExistentAccountId = 1337L;
+    transactionRequest.setAccountId(nonExistentAccountId);
+
+    IntegrationRequests.post("/transactions", transactionRequest)
+        .then()
+        .assertThat()
+        .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
+        .body(
+            "error_message",
+            equalTo(String.format("Account with id: [%s] not found.", nonExistentAccountId)));
   }
 }

@@ -26,9 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class TransactionServiceTest {
 
   @MockBean private AccountService accountService;
-
   @MockBean private TransactionRepository transactionRepository;
-
   @SpyBean private TransactionServiceImpl transactionService;
 
   @Test
