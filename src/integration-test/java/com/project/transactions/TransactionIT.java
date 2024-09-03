@@ -15,6 +15,7 @@ import com.project.transactions.repository.AccountRepository;
 import com.project.transactions.repository.TransactionRepository;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -165,6 +166,8 @@ public class TransactionIT extends TransactionsApplicationIT {
   @Test
   public void executePaymentWithNonExistentAccountIdThenReturnBusinessException()
       throws IOException {
+    transactionRepository.deleteAll();
+
     TransactionRequest transactionRequest =
         TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(100.22));
     Long nonExistentAccountId = 1337L;
@@ -177,5 +180,10 @@ public class TransactionIT extends TransactionsApplicationIT {
         .body(
             "error_message",
             equalTo(String.format("Account with id: [%s] not found.", nonExistentAccountId)));
+
+    List<Transaction> transactionList =
+        transactionRepository.findAllByAccountId(transactionRequest.getAccountId());
+
+    assertTrue(transactionList.isEmpty());
   }
 }
