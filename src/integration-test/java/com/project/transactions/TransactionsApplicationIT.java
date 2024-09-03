@@ -11,8 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {Application.class})
-@ComponentScan(basePackageClasses = {TransactionsApplicationIT.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@ComponentScan(basePackageClasses = {TransactionsApplicationIT.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TransactionsApplicationIT {
 
