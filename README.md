@@ -62,8 +62,20 @@ at http://localhost:8080.
 
 ### Testing
 
-To run tests, use the following Maven command:
+To run only unit tests, use the following Maven command:
 
 ```
 ./mvnw test
+```
+
+To run only integration tests, use the following Maven command:
+
+```
+./mvnw failsafe:integration-test
+```
+
+To run both, unit and integration tests, use the following Maven command:
+
+```
+./mvnw verify
 ```
