@@ -2,8 +2,8 @@
 
 ## Overview
 
-This project is a Spring Boot application packaged as a Docker container. It demonstrates how to build and deploy a
-Spring Boot application using Docker.
+This is a project to simulate a Customer Account & Transactions API. 
+It also contains a Dockerfile in order to make it dockerable.
 
 ## Prerequisites
 
