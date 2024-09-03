@@ -19,31 +19,29 @@ git clone https://github.com/Ganuto/transactions.git
 cd transactions
 ```
 
-### 2. Build the Spring Boot Application:
-
-If you wish to build the application locally before Dockerizing, use:
-
-````
-./mvnw clean package
-````
-This will generate a JAR file in the target directory.
-
-### 3. Running the Application
+### 2. Build the image
 Ensure Docker is running on your machine. Then build the Docker image using the Dockerfile provided:
 
 ```
 docker build -t transactions .
 ```
-Once the image is built, you can run the Docker container:
 
+### 3. Run the image
+Once the image is built, you can run the Docker container:
 ```
 docker run -p 8080:8080 transactions
 ```
 This command maps port 8080 on your local machine to port 8080 on the Docker container. You can access the application at http://localhost:8080.
 
 ### Without Docker
-If you prefer running the application outside Docker, use the command below (assuming you have built the JAR file):
+If you wish to build the application locally before Dockerizing, execute:
 
+````
+./mvnw clean package
+````
+This will generate a JAR file in the target directory.
+
+Then, execute the generated .jar
 ````
 java -jar target/transactions-1.0.0.jar
 ````
@@ -55,8 +53,3 @@ To run tests, use the following Maven command:
 ./mvnw test
 ```
 
-To run tests within Docker, ensure you have built the image and then execute:
-
-````
-docker run --rm transactions mvnw test
-````
