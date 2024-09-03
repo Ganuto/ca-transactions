@@ -3,20 +3,19 @@ package com.project.transactions.config;
 import com.project.transactions.domain.ErrorResponse;
 import com.project.transactions.domain.exception.BusinessException;
 import java.time.LocalDateTime;
-import org.springframework.http.HttpHeaders;
+import java.util.Arrays;
+import java.util.Optional;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.webjars.NotFoundException;
 
 @ControllerAdvice
-public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
+public class InternalExceptionHandler {
 
   @ExceptionHandler({BusinessException.class})
   public ResponseEntity handleBusinessException(Exception ex) {
@@ -28,15 +27,26 @@ public class InternalExceptionHandler extends ResponseEntityExceptionHandler {
     return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 
-//  @Override
-//  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-//    return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-//  }
-//
-//  @Override
-//  protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-//    return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-//  }
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<Object> handleMethodArgumentNotValidException(
+      MethodArgumentNotValidException ex) {
+    String errorMessage =
+        Optional.ofNullable(ex.getBindingResult().getFieldError())
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .orElse("Invalid request content.");
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
+  }
+
+  @ExceptionHandler(HandlerMethodValidationException.class)
+  public ResponseEntity<Object> handleMethodValidationException(
+      HandlerMethodValidationException ex) {
+    String errorMessage = ex.getMessage();
+    Object[] detailMessageArguments = ex.getDetailMessageArguments();
+    if (detailMessageArguments != null && detailMessageArguments.length > 0) {
+      errorMessage = Arrays.stream(detailMessageArguments).findFirst().map(Object::toString).get();
+    }
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
+  }
 
   private ResponseEntity buildErrorResponse(HttpStatus httpStatus, String message) {
     ErrorResponse errorResponse =

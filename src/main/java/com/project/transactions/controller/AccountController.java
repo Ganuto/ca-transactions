@@ -26,7 +26,7 @@ public class AccountController {
 
   @GetMapping
   public ResponseEntity<AccountResponse> get(
-      @RequestParam @Positive(message = "'accountId' cannot be negative or zero") Long accountId) {
+      @RequestParam @Positive(message = "accountId cannot be negative or zero") Long accountId) {
     return ResponseEntity.ok(accountService.findById(accountId));
   }
 }
