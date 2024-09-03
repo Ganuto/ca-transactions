@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a project to simulate a Customer Account & Transactions API. 
+This is a project to serve as a Customer Account & Transactions API. 
 It also contains a Dockerfile in order to make it dockerable.
 
 ## Prerequisites
