@@ -18,12 +18,12 @@ import org.webjars.NotFoundException;
 public class InternalExceptionHandler {
 
   @ExceptionHandler({BusinessException.class})
-  public ResponseEntity handleBusinessException(Exception ex) {
+  public ResponseEntity<Object> handleBusinessException(Exception ex) {
     return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
   }
 
   @ExceptionHandler({NotFoundException.class})
-  public ResponseEntity handleNotFoundException(Exception ex) {
+  public ResponseEntity<Object> handleNotFoundException(Exception ex) {
     return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 
@@ -48,10 +48,10 @@ public class InternalExceptionHandler {
     return buildErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
   }
 
-  private ResponseEntity buildErrorResponse(HttpStatus httpStatus, String message) {
+  private ResponseEntity<Object> buildErrorResponse(HttpStatus httpStatus, String message) {
     ErrorResponse errorResponse =
         new ErrorResponse(
             LocalDateTime.now(), httpStatus.value(), httpStatus.getReasonPhrase(), message);
-    return new ResponseEntity(errorResponse, httpStatus);
+    return new ResponseEntity<>(errorResponse, httpStatus);
   }
 }
