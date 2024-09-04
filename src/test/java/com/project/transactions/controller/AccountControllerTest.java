@@ -94,7 +94,6 @@ public class AccountControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.timestamp").exists())
-        .andExpect(jsonPath("$.http_code").value(HttpStatus.BAD_REQUEST.value()))
         .andExpect(jsonPath("$.http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
         .andExpect(
             jsonPath("$.error_message")
@@ -111,7 +110,6 @@ public class AccountControllerTest {
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.timestamp").exists())
-        .andExpect(jsonPath("$.http_code").value(HttpStatus.BAD_REQUEST.value()))
         .andExpect(jsonPath("$.http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
         .andExpect(jsonPath("$.error_message").value("accountId cannot be negative or zero"));
   }

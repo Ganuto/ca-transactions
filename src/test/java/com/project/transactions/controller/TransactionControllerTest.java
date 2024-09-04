@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -124,5 +125,63 @@ public class TransactionControllerTest {
         .andExpect(jsonPath("$.account_id").value(transactionResponse.getAccountId()))
         .andExpect(jsonPath("$.operation_type_id").value(transactionResponse.getOperationTypeId()))
         .andExpect(jsonPath("$.amount").value(transactionResponse.getAmount()));
+  }
+
+  @Test
+  public void createTransactionWithWrongAccountIdThenReturnBadRequestException() throws Exception {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(10.23));
+
+    transactionRequest.setAccountId(0L);
+
+    mockMvc
+        .perform(
+            post("/transactions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.convertObjectToJsonString(transactionRequest)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("timestamp").exists())
+        .andExpect(jsonPath("http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("error_message").value("account_id cannot be negative."));
+  }
+
+  @Test
+  public void createTransactionWithWrongOperationTypeThenReturnBadRequestException()
+      throws Exception {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(10.23));
+
+    transactionRequest.setOperationTypeId(6);
+
+    mockMvc
+        .perform(
+            post("/transactions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.convertObjectToJsonString(transactionRequest)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("timestamp").exists())
+        .andExpect(jsonPath("http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("error_message").value("operation_type_id cannot be more than 4."));
+  }
+
+  @Test
+  public void createTransactionWithAmountAsNullThenReturnBadRequestException() throws Exception {
+    TransactionRequest transactionRequest =
+        TransactionMock.createTransactionRequest(OperationType.PAYMENT, BigDecimal.valueOf(10.23));
+
+    transactionRequest.setAmount(null);
+
+    mockMvc
+        .perform(
+            post("/transactions")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.convertObjectToJsonString(transactionRequest)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("timestamp").exists())
+        .andExpect(jsonPath("http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("error_message").value("amount cannot be null."));
   }
 }
