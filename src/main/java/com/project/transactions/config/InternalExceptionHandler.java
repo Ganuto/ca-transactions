@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.webjars.NotFoundException;
 
 @ControllerAdvice
@@ -35,6 +36,12 @@ public class InternalExceptionHandler {
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .orElse("Invalid request content.");
     return buildErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(
+      MethodArgumentTypeMismatchException ex) {
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
   }
 
   @ExceptionHandler(HandlerMethodValidationException.class)

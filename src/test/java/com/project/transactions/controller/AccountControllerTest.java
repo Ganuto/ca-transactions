@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -49,7 +50,6 @@ public class AccountControllerTest {
         .andExpect(jsonPath("$.document_number").value(accountResponse.getDocumentNumber()));
   }
 
-  // TODO: CHECK ERROR MESSAGE
   @Test
   public void createUserAndReturnBadRequest() throws Exception {
     AccountCreationRequest accountCreationRequest = AccountMock.createWrongAccountCreationRequest();
@@ -61,6 +61,8 @@ public class AccountControllerTest {
                 .content(TestUtils.convertObjectToJsonString(accountCreationRequest)))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.timestamp").exists())
+        .andExpect(jsonPath("$.http_code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
         .andExpect(
             jsonPath("$.error_message")
                 .value("document_number must match the expression '^[0-9]*$' (number only)."))
@@ -81,15 +83,36 @@ public class AccountControllerTest {
         .andExpect(jsonPath("$.document_number").value(accountResponse.getDocumentNumber()));
   }
 
-  // TODO: CHECK ERROR MESSAGE
   @Test
-  public void getUserAndReturnBadRequest() throws Exception {
+  public void getUserWithStringAccountIDAndReturnBadRequest() throws Exception {
+    String wrongAccountId = "NOT_A_NUMBER";
     mockMvc
         .perform(
             get("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("accountId", "NOT_A_NUMBER"))
+                .param("accountId", wrongAccountId))
         .andDo(print())
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.timestamp").exists())
+        .andExpect(jsonPath("$.http_code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(
+            jsonPath("$.error_message")
+                .value(
+                    String.format(
+                        "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"%s\"",
+                        wrongAccountId)));
+  }
+
+  @Test
+  public void getUserWithNegativeAccountIdAndReturnBadRequest() throws Exception {
+    mockMvc
+        .perform(get("/accounts").contentType(MediaType.APPLICATION_JSON).param("accountId", "-1"))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.timestamp").exists())
+        .andExpect(jsonPath("$.http_code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.http_status").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.error_message").value("accountId cannot be negative or zero"));
   }
 }
