@@ -60,6 +60,10 @@ public class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.convertObjectToJsonString(accountCreationRequest)))
         .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.timestamp").exists())
+        .andExpect(
+            jsonPath("$.error_message")
+                .value("document_number must match the expression '^[0-9]*$' (number only)."))
         .andDo(print());
   }
 
